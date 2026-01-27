@@ -1,4 +1,4 @@
-# app.py
+### app.py
 import streamlit as st
 from datetime import date, datetime, time
 
@@ -14,7 +14,7 @@ from database import (
 from ai_utils import stuck_task_analysis
 
 
-## 1. page configuration
+## 1) page configuration
 st.set_page_config(
     page_title="Smart Todo App",
     page_icon="⚡",
@@ -22,7 +22,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-## 2. custom CSS
+## 2) custom CSS
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
@@ -130,6 +130,11 @@ st.markdown("""
         border-radius: 8px !important;
     }
     
+    /* Force Progress Bar Color to Green */
+    .stProgress > div > div > div > div {
+        background-color: #22c55e;
+    }
+    
     /* Footer Styling */
     .footer {
         text-align: center;
@@ -150,7 +155,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-## 3. initialisation and state
+## 3) initialisation and state
 create_table()
 
 if "edit_id" not in st.session_state:
@@ -172,7 +177,7 @@ if "new_desc" not in st.session_state:
 if "new_due_date" not in st.session_state:
     st.session_state.new_due_date = date.today()
 if "new_due_time" not in st.session_state:
-    st.session_state.new_due_time = time(9, 0) # Default 9:00 AM
+    st.session_state.new_due_time = time(9, 0) # default 9:00 AM
 if "new_tz" not in st.session_state:
     st.session_state.new_tz = "IST"
 if "new_pr" not in st.session_state:
@@ -227,7 +232,7 @@ def handle_add_task():
     st.session_state.ai_for_task = None
     st.session_state.edit_id = None
 
-## 4. header section
+## 4) header section
 st.markdown("""
 <div class="app-header">
     <div class="app-title">⚡ Smart Todo App</div>
@@ -237,7 +242,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-## 5. add task form 
+## 5) add task form 
 with st.expander("➕ Create New Task", expanded=True):
     c1, c2 = st.columns([3, 1])
     with c1:
@@ -254,11 +259,11 @@ with st.expander("➕ Create New Task", expanded=True):
     with cd2:
         st.time_input("Time", key="new_due_time")
     with cd3:
-        st.selectbox("Zone", ["IST", "GMT", "UTC", "EST", "PST", "CET"], key="new_tz")
+        st.selectbox("Zone", ["IST", "JST", "GMT", "UTC", "EST", "PST", "CET"], key="new_tz")
 
     st.button("Add Task", use_container_width=True, type="primary", on_click=handle_add_task)
 
-## 6. dashboard (metrics & filters)
+## 6) dashboard (metrics & filters)
 st.markdown("<br>", unsafe_allow_html=True)
 
 tasks = get_all_tasks()
@@ -267,23 +272,21 @@ if tasks:
     done_count = sum(1 for t in tasks if t[3] == "Completed")
     total = len(tasks)
     
-    col_metrics, col_filters = st.columns([1.5, 2])
+    # Full Width Progress Bar (Green Color handled via CSS)
+    st.caption(f"**Progress:** {done_count}/{total} Completed")
+    st.progress(done_count / total)
     
-    with col_metrics:
-        st.caption(f"**Progress:** {done_count}/{total} Completed")
-        st.progress(done_count / total)
-        
-    with col_filters:
-        f1, f2 = st.columns(2)
-        with f1:
-            st.selectbox("Filter", ["All", "Pending", "Completed"], key="filter", label_visibility="collapsed")
-        with f2:
-            st.selectbox("Sort", ["Priority", "Due Date"], key="sort", label_visibility="collapsed")
+    # Filters Below the Progress Bar
+    f1, f2 = st.columns(2)
+    with f1:
+        st.selectbox("Filter", ["All", "Pending", "Completed"], key="filter", label_visibility="collapsed")
+    with f2:
+        st.selectbox("Sort", ["Priority", "Due Date"], key="sort", label_visibility="collapsed")
 else:
     st.info("No tasks yet. Add one above to get started!")
 
 
-### 7. task list
+### 7) task list
 st.markdown("---")
 
 display_tasks = tasks
@@ -439,10 +442,9 @@ else:
         st.write("") 
 
 
-## 8. footer 
+## 8) footer 
 st.markdown("""
 <div class="footer">
     Made with ❤️ by © <a href="https://www.linkedin.com/in/shivam-rathaur/" target="_blank">Shivam Rathaur</a> IIT Hyderabad
 </div>
 """, unsafe_allow_html=True)
-
