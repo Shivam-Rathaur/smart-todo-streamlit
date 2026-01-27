@@ -155,7 +155,3 @@ Indian Institute of Technology Hyderabad
 ## 📜 License
 
 This project is intended for academic and evaluation purposes as part of the NGK Internship selection process.
-
-```
-
----
