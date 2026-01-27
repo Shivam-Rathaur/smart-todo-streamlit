@@ -4,11 +4,11 @@ from datetime import datetime
 
 DB_NAME = "tasks.db"
 
-# ---------------- Connection ----------------
+## connection
 def get_connection():
     return sqlite3.connect(DB_NAME, check_same_thread=False)
 
-# ---------------- Create Table (SAFE) ----------------
+## create Table (safe)
 def create_table():
     conn = get_connection()
     cursor = conn.cursor()
@@ -29,7 +29,7 @@ def create_table():
     conn.commit()
     conn.close()
 
-# ---------------- Add Task ----------------
+### add task 
 def add_task(title, description, due_date=None, priority=3):
     conn = get_connection()
     cursor = conn.cursor()
@@ -44,7 +44,7 @@ def add_task(title, description, due_date=None, priority=3):
     conn.commit()
     conn.close()
 
-# ---------------- Get All Tasks ----------------
+### get all tasks
 def get_all_tasks():
     conn = get_connection()
     cursor = conn.cursor()
@@ -58,7 +58,7 @@ def get_all_tasks():
     conn.close()
     return tasks
 
-# ---------------- Update Status ----------------
+### update status
 def update_status(task_id, status):
     conn = get_connection()
     cursor = conn.cursor()
@@ -72,7 +72,7 @@ def update_status(task_id, status):
     conn.commit()
     conn.close()
 
-# ---------------- Update Task ----------------
+## update task
 def update_task(task_id, title, description, due_date, priority):
     conn = get_connection()
     cursor = conn.cursor()
@@ -93,7 +93,7 @@ def update_task(task_id, title, description, due_date, priority):
     conn.commit()
     conn.close()
 
-# ---------------- Delete Task ----------------
+### delete task
 def delete_task(task_id):
     conn = get_connection()
     cursor = conn.cursor()

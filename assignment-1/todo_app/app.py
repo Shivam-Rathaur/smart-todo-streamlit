@@ -2,9 +2,7 @@
 import streamlit as st
 from datetime import date, datetime, time
 
-# =========================================================
-# IMPORTS
-# =========================================================
+# imports
 from database import (
     create_table,
     add_task,
@@ -15,9 +13,8 @@ from database import (
 )
 from ai_utils import stuck_task_analysis
 
-# =========================================================
-# 1. PAGE CONFIGURATION
-# =========================================================
+
+## 1. page configuration
 st.set_page_config(
     page_title="Smart Todo App",
     page_icon="⚡",
@@ -25,9 +22,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# =========================================================
-# 2. CUSTOM CSS
-# =========================================================
+## 2. custom CSS
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
@@ -155,9 +150,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# =========================================================
-# 3. INITIALIZATION & STATE
-# =========================================================
+## 3. initialisation and state
 create_table()
 
 if "edit_id" not in st.session_state:
@@ -185,21 +178,21 @@ if "new_tz" not in st.session_state:
 if "new_pr" not in st.session_state:
     st.session_state.new_pr = 3 
 
-# Helper to format combined string
+# helper to format combined string
 def format_datetime(d_val, t_val, tz_val):
     if not d_val: return None
-    # Returns format: "YYYY-MM-DD HH:MM AM/PM TZ"
+    # returns format: "YYYY-MM-DD HH:MM AM/PM TZ"
     t_str = t_val.strftime("%I:%M %p")
     return f"{d_val} {t_str} {tz_val}"
 
-# Helper to clean AI text
+## helper to clean AI text
 def clean_ai(text: str) -> str:
     if not text: return ""
     for ch in ["#", "*", "`"]:
         text = text.replace(ch, "")
     return text.strip()
 
-# Callback for Add Task
+## callback for Add Task
 def handle_add_task():
     t = st.session_state.new_title
     d = st.session_state.new_desc
@@ -215,14 +208,14 @@ def handle_add_task():
         st.toast("Due date is required!", icon="⚠️")
         return
     
-    # Format Combine String
+    ## Format Combine String
     final_due_str = format_datetime(d_date, d_time, d_tz)
 
-    # Add Task
+    ## Add Task
     add_task(t.strip(), d.strip(), final_due_str, p)
     st.toast("Task added successfully!", icon="✅")
     
-    # Clear Inputs via Session State keys
+    ## Clear Inputs via Session State keys
     st.session_state.new_title = ""
     st.session_state.new_desc = ""
     st.session_state.new_due_date = date.today()
@@ -230,13 +223,11 @@ def handle_add_task():
     st.session_state.new_tz = "IST"
     st.session_state.new_pr = 3 
     
-    # Reset UI states
+    ## Reset UI states
     st.session_state.ai_for_task = None
     st.session_state.edit_id = None
 
-# =========================================================
-# 4. HEADER SECTION
-# =========================================================
+## 4. header section
 st.markdown("""
 <div class="app-header">
     <div class="app-title">⚡ Smart Todo App</div>
@@ -246,9 +237,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# =========================================================
-# 5. ADD TASK FORM
-# =========================================================
+## 5. add task form 
 with st.expander("➕ Create New Task", expanded=True):
     c1, c2 = st.columns([3, 1])
     with c1:
@@ -269,9 +258,7 @@ with st.expander("➕ Create New Task", expanded=True):
 
     st.button("Add Task", use_container_width=True, type="primary", on_click=handle_add_task)
 
-# =========================================================
-# 6. DASHBOARD (METRICS & FILTERS)
-# =========================================================
+## 6. dashboard (metrics & filters)
 st.markdown("<br>", unsafe_allow_html=True)
 
 tasks = get_all_tasks()
@@ -295,9 +282,8 @@ if tasks:
 else:
     st.info("No tasks yet. Add one above to get started!")
 
-# =========================================================
-# 7. TASK LIST
-# =========================================================
+
+### 7. task list
 st.markdown("---")
 
 display_tasks = tasks
@@ -322,7 +308,7 @@ else:
         badge_style = "badge-completed" if status == "Completed" else "badge-pending"
         priority_style = f"priority-{pr}"
         
-        # --- CARD DISPLAY ---
+        ### card display 
         # Note: 'due' now contains "YYYY-MM-DD HH:MM AM/PM TZ" so it displays fully
         st.markdown(f"""
         <div class="task-card-container {priority_style}">
@@ -340,7 +326,7 @@ else:
         </div>
         """, unsafe_allow_html=True)
 
-        # --- ACTION BUTTONS ---
+        ### action buttons 
         b1, b2, b3, b4 = st.columns([1.2, 1, 1.5, 0.8])
 
         with b1:
@@ -389,9 +375,9 @@ else:
                 st.session_state.edit_id = None
                 st.rerun()
 
-        # --- DYNAMIC SECTIONS ---
+        ### dynamic sections
         
-        # 1. Edit Form (Takes Precedence)
+        ## a) edit Form (takes precedence)
         if st.session_state.edit_id == tid:
             with st.container():
                 with st.form(key=f"edit_form_{tid}"):
@@ -401,7 +387,7 @@ else:
                     new_priority = col_e2.selectbox("Priority", [1,2,3,4,5], index=pr-1, key=f"sel_{tid}")
                     new_desc = st.text_area("Description", value=desc or "")
                     
-                    # Logic to parse existing Date/Time string
+                    # logic to parse existing Date/Time string
                     # Format stored is: "YYYY-MM-DD HH:MM AM/PM TZ" or "YYYY-MM-DD"
                     def_date = date.today()
                     def_time = time(9, 0)
@@ -409,12 +395,12 @@ else:
 
                     if due:
                         parts = due.split(' ')
-                        # Try to extract Date
+                        # try to extract Date
                         try:
                             def_date = date.fromisoformat(parts[0])
                         except: pass
                         
-                        # Try to extract Time (e.g., "02:30 PM")
+                        # try to extract Time (e.g., "02:30 PM")
                         if len(parts) >= 3:
                             try:
                                 t_str = parts[1] + " " + parts[2]
@@ -422,11 +408,11 @@ else:
                                 def_time = parsed_time
                             except: pass
                         
-                        # Try to extract TZ
+                        # try to extract TZ
                         if len(parts) >= 4:
                             def_tz = parts[3]
 
-                    # 3-Column Layout for Edit
+                    # 3-column Layout for Edit
                     ce1, ce2, ce3 = st.columns([2, 1.5, 1])
                     nd_date = ce1.date_input("Due Date", value=def_date)
                     nd_time = ce2.time_input("Time", value=def_time)
@@ -439,7 +425,7 @@ else:
                         st.toast("Task updated successfully!", icon="💾")
                         st.rerun()
 
-        # 2. AI Insight Box (Only if NOT editing)
+        ## b) AI Insight Box (only if "not" editing)
         elif st.session_state.ai_for_task == tid:
             st.markdown(f"""
             <div class="ai-insight-box">
@@ -452,11 +438,11 @@ else:
         
         st.write("") 
 
-# =========================================================
-# 8. FOOTER
-# =========================================================
+
+## 8. footer 
 st.markdown("""
 <div class="footer">
     Made with ❤️ by © <a href="https://www.linkedin.com/in/shivam-rathaur/" target="_blank">Shivam Rathaur</a> IIT Hyderabad
 </div>
 """, unsafe_allow_html=True)
+
