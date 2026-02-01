@@ -1,4 +1,4 @@
-# ⚡ Smart Todo App
+# Smart Todo App
 
 An intelligent, distraction-free productivity assistant built using **Python, SQLite, Streamlit, and Generative AI**.
 
@@ -6,7 +6,7 @@ This project was developed as part of the **NGK Internship Assignment**, with a 
 
 ---
 
-## 🚀 Overview
+## Overview
 
 The **Smart Todo App** goes beyond a basic to-do list.  
 It helps users **organize tasks**, **track progress**, and **overcome procrastination** using AI-assisted insights — all within a modern, responsive interface.
@@ -15,9 +15,9 @@ The application is fully local (SQLite-based), privacy-safe, and does **not** ex
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 1️⃣ Task Management
+### Task Management
 - **Detailed Task Creation**
   - Title (required)
   - Description (optional)
@@ -33,7 +33,7 @@ The application is fully local (SQLite-based), privacy-safe, and does **not** ex
 
 ---
 
-### 2️⃣ Smart Organization
+### Smart Organization
 - **Priority Levels**
   - Visual color indicators (Red = High, Green = Low)
 - **Sorting**
@@ -46,7 +46,7 @@ The application is fully local (SQLite-based), privacy-safe, and does **not** ex
 
 ---
 
-### 3️⃣ Generative AI Integration
+### Generative AI Integration
 - **“Why am I stuck?” Insight**
   - Uses a Generative AI API to analyze why a task feels difficult
   - Suggests a small, actionable first step
@@ -54,12 +54,12 @@ The application is fully local (SQLite-based), privacy-safe, and does **not** ex
   - If the AI quota is exceeded or unavailable, the app displays a helpful human-written tip
   - Ensures the app never crashes or exposes raw API errors
 
-> ⚠️ **Important:**  
+> **Important:**  
 > API keys are read only from environment variables and are **never included in the source code**.
 
 ---
 
-### 4️⃣ Enhanced UX & UI
+###  Enhanced UX & UI
 - **Modern Card-Based Design**
   - Clean typography (Inter font)
   - Hover effects and soft shadows
@@ -75,7 +75,7 @@ The application is fully local (SQLite-based), privacy-safe, and does **not** ex
 
 ---
 
-## 🧱 Tech Stack
+## Tech Stack
 
 - **Frontend / UI:** Streamlit  
 - **Backend:** Python  
@@ -99,22 +99,22 @@ todo_app/
 
 ---
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 
-### 1️⃣ Install Dependencies
+###  Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2️⃣ Set Environment Variable (API Key)
+###  Set Environment Variable (API Key)
 
 ```bash
 export GEMINI_API_KEY="your_api_key_here"      # macOS / Linux
 setx GEMINI_API_KEY "your_api_key_here"        # Windows
 ```
 
-### 3️⃣ Run the Application
+### Run the Application
 
 ```bash
 streamlit run app.py
@@ -122,16 +122,14 @@ streamlit run app.py
 
 ---
 
-## 🔒 Security & Best Practices
+## Security & Best Practices
 
-* ✅ No API keys committed to source code
-* ✅ Graceful handling of AI quota limits
-* ✅ SQLite transactions safely managed
-* ✅ Clean session-state handling to avoid UI crashes
+* No API keys committed to source code
+* Graceful handling of AI quota limits
+* SQLite transactions safely managed
+* Clean session-state handling to avoid UI crashes
 
 ---
-
-## 🎯 Evaluation Focus (NGK Internship)
 
 This project demonstrates:
 
